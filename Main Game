@@ -1,0 +1,116 @@
+
+/* PROBLEMS TO RESOLVE -
+ * restricting attacks to certain chars - DONE!
+ * turns? - will be based on odd or even in a while loop
+ */
+import java.io.InputStream;
+import java.util.Scanner;
+
+public class Game {
+	int hp;
+	int str;
+	int intl;
+	int dex;
+	String selected;
+
+	public Game(int hp, int str, int intl, int dex, String selected) {
+		this.hp = hp;
+		this.str = str;
+		this.intl = intl;
+		this.dex = dex;
+		this.selected = selected;
+	}
+
+	public void chooseChar(String playerNum) {
+		// prompting the player to choose a character
+		System.out.println(playerNum + "choose your character!");
+		Scanner input = new Scanner(System.in);
+		String charSelected = input.nextLine();
+
+		switch (charSelected) {
+		case "peanut":
+			hp = 20;
+			str = 7;
+			intl = 11;
+			dex = 15;
+			selected = "peanut";
+			break;
+		case "pistachio":
+			hp = 42;
+			str = 17;
+			intl = 4;
+			dex = 7;
+			selected = "pistachio";
+			break;
+		}
+	}
+
+	/*
+	 * public void toDo(Game defender, String input, int hitPoints, int strength,
+	 * int intelligence, int dexterity) { switch(input) { case "swipe": if (dex >
+	 * 13) { defender.hp -= dexterity * 15; } else { System.out.
+	 * println("I'm not fast enough to cast that! I tried and tripped over the box :/"
+	 * ); } }
+	 * 
+	 * 
+	 * }
+	 */
+
+	//display hp method
+	public void hpD(Game player) {
+		System.out.println(selected + "'s hp is " + hp + ", and, " + 
+	player.selected + "'s hp is " + player.hp);
+	}
+	// building attacks
+	
+	public int swipe(Game defender, int dexterity) {
+		if (dex > 13) {
+			defender.hp -= dexterity * 0.5;
+		} else {
+			System.out.println("I'm not fast enough to cast that! I tried and tripped over the box :/");
+		}
+		return defender.hp;
+	}
+	
+	
+
+	public static void main(String[] args) {
+		Game player1 = new Game(0, 0, 0, 0, "");
+		Game player2 = new Game(0, 0, 0, 0, "");
+
+		player1.chooseChar("Player 1, ");
+		player2.chooseChar("Player 2, ");
+		
+		final int startingHP1 = player1.hp;
+		final int startingHP2 = player2.hp;
+				
+		int i = 0;
+		while (player1.hp > 0 && player2.hp > 0) {
+			if (i % 2 == 0) {
+				// it is player1's turn
+				System.out.println(player1.selected + ", what would you like to do?");
+				Scanner input = new Scanner(System.in);
+				String thisTurn = input.nextLine();
+
+				// taking the input and making it do something
+				switch(thisTurn) {
+				case "swipe":
+					player1.swipe(player2, player1.dex);
+					
+					
+				}
+				player1.hpD(player2);
+			}
+
+		
+			//checks for win
+			if (player1.hp <= 0) {
+			System.out.println("Congratulations player 2, you won! But at what cost...");
+			} else if (player2.hp <= 0) {
+			System.out.println("Congratulations player 1, you won! But at what cost...");
+		}
+
+	}
+
+	}
+}
