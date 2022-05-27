@@ -1,24 +1,22 @@
 
-/* PROBLEMS TO RESOLVE -
- * restricting attacks to certain chars - DONE!
- * turns? - will be based on odd or even in a while loop
- */
-import java.io.InputStream;
+
 import java.util.Scanner;
 
 public class Game {
-	int hp;
-	int str;
-	int intl;
-	int dex;
+	double hp;
+	double str;
+	double intl;
+	double dex;
+	double def;
 	String selected;
 
-	public Game(int hp, int str, int intl, int dex, String selected) {
+	public Game(double hp, double str, double intl, double dex, double def, String selected) {
 		this.hp = hp;
 		this.str = str;
 		this.intl = intl;
 		this.dex = dex;
 		this.selected = selected;
+		this.def = def;
 	}
 
 	public void chooseChar(String playerNum) {
@@ -33,6 +31,7 @@ public class Game {
 			str = 7;
 			intl = 11;
 			dex = 15;
+			def = 1;
 			selected = "peanut";
 			break;
 		case "pistachio":
@@ -40,77 +39,87 @@ public class Game {
 			str = 17;
 			intl = 4;
 			dex = 7;
+			def = 1;
 			selected = "pistachio";
 			break;
 		}
 	}
 
-	/*
-	 * public void toDo(Game defender, String input, int hitPoints, int strength,
-	 * int intelligence, int dexterity) { switch(input) { case "swipe": if (dex >
-	 * 13) { defender.hp -= dexterity * 15; } else { System.out.
-	 * println("I'm not fast enough to cast that! I tried and tripped over the box :/"
-	 * ); } }
-	 * 
-	 * 
-	 * }
-	 */
-
-	//display hp method
+	// display hp method
 	public void hpD(Game player) {
-		System.out.println(selected + "'s hp is " + hp + ", and, " + 
-	player.selected + "'s hp is " + player.hp);
+		System.out.println(selected + "'s hp is " + hp + ", and, " + player.selected + "'s hp is " + player.hp);
 	}
-	// building attacks
-	
-	public int swipe(Game defender, int dexterity) {
+
+
+	// building peanut's attacks
+	public void swipe(Game defender, double dexterity) {
 		if (dex > 13) {
-			defender.hp -= dexterity * 0.5;
+			defender.hp -= dexterity * 0.5 * defender.def;
 		} else {
-			System.out.println("I'm not fast enough to cast that! I tried and tripped over the box :/");
+			System.out.println("I'm not fast enough to do that! I tried and tripped over the box :/");
 		}
-		return defender.hp;
+		
 	}
+
+	public void purr(Game defender, double intl) {
+		if (selected == "peanut" || selected == "pistachio") {
+			defender.def *= 0.8;
+			System.out.println(defender.selected + " looks a bit less attentive!" + defender.def);
+		}
+	}
+
 	
-	
+	//turn method!!!!
+	public void turn(double defHP, double defStr, double defIntl, double defDex, double defDef, Game defender) {
+		System.out.println(selected + ", what would you like to do?");
+		Scanner input = new Scanner(System.in);
+		String thisTurn = input.nextLine();
+
+		switch (thisTurn) {
+		case "swipe":
+			swipe(defender, dex);
+			break;
+		case "purr":
+			purr(defender, intl);
+		}
+
+	}
 
 	public static void main(String[] args) {
-		Game player1 = new Game(0, 0, 0, 0, "");
-		Game player2 = new Game(0, 0, 0, 0, "");
+		Game player1 = new Game(0, 0, 0, 0, 0, "");
+		Game player2 = new Game(0, 0, 0, 0, 0, "");
 
 		player1.chooseChar("Player 1, ");
 		player2.chooseChar("Player 2, ");
 		
-		final int startingHP1 = player1.hp;
-		final int startingHP2 = player2.hp;
-				
-		int i = 0;
+		player1.hpD(player2);
+
+		double i = 0;
 		while (player1.hp > 0 && player2.hp > 0) {
 			if (i % 2 == 0) {
 				// it is player1's turn
-				System.out.println(player1.selected + ", what would you like to do?");
-				Scanner input = new Scanner(System.in);
-				String thisTurn = input.nextLine();
-
-				// taking the input and making it do something
-				switch(thisTurn) {
-				case "swipe":
-					player1.swipe(player2, player1.dex);
-					
-					
-				}
+				player1.turn(player2.hp, player2.str, player2.intl, player2.dex, player2.def, player2);
 				player1.hpD(player2);
+				i++;
 			}
 
-		
-			//checks for win
-			if (player1.hp <= 0) {
-			System.out.println("Congratulations player 2, you won! But at what cost...");
-			} else if (player2.hp <= 0) {
-			System.out.println("Congratulations player 1, you won! But at what cost...");
+			else if (i % 2 != 0) {
+				// it is player2's turn
+				player2.turn(player1.hp, player1.str, player1.intl, player1.dex, player1.def, player1);
+				player1.hpD(player2);
+				i++;
+			}
+
 		}
+		
+		// checks for win
+		if (player1.hp <= 0) {
+			System.out.println("Congratulations " + player2.selected + ". you won! But at what cost...");
+		} else if (player2.hp <= 0) {
+			System.out.println("Congratulations " + player1.selected + ". you won! But at what cost...");
+		}
+		
 
 	}
 
-	}
 }
