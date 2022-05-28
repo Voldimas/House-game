@@ -1,6 +1,6 @@
-
-
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Random;
 
 public class Game {
 	double hp;
@@ -19,6 +19,98 @@ public class Game {
 		this.def = def;
 	}
 
+	// building peanut's attacks
+	public void swipe(Game defender, double dexterity) {
+		Random random = new Random();
+		int i = random.nextInt(2) + 1;
+		int swipeCount = 1;
+		System.out.println("me-ow! I was swiped " + swipeCount
+				+ " times!");
+		while (i > 0) {
+			if (selected == "peanut") {
+				defender.hp -= dexterity * 0.5 * (1 / defender.def);
+				swipeCount++;
+				i--;
+			} else {
+				System.out.println("I'm not fast enough to do that! "
+						+ "I tried and tripped over the box :/");
+				i = 0;
+			}
+
+		}
+	}
+
+	public void purr(Game defender, double intl) {
+		if (selected == "peanut" || selected == "pistachio") {
+			double i = intl * 0.01;
+			defender.def *= 1 - i;
+			System.out.println(defender.selected + " looks a bit less attentive!" + defender.def);
+		}
+	}
+	
+	public void sneakAtk(Game defender, double dex) {
+		if(selected == "peanut") {
+			defender.hp -= dex * 0.3 * defender.def;
+			defender.def *= 0.9;
+			System.out.println("Hey that was a cheap shot! Wait, where'd she go?");
+		}
+		else {
+			System.out.println("I'm not as fast as peanut :(");
+		}
+	}
+	
+	public void catnip() {
+		if(selected == "peanut") {
+			dex *= 1.2;
+		System.out.println("Peanut just got into the nip... looks like she's"
+				+ " moving even faster!");
+		}
+	}
+	
+	public void peanutMoveList() {
+		System.out.println("");
+		System.out.println("Peanut the Quick has 4 moves");
+		System.out.println("Swipe: A ligtning fast attack that deals damage based off her dexterity");
+		System.out.println("Sneak attack: A cheap shot that doesn't do as much damage as swipe, but makes you more vulnerable.");
+		System.out.println("Purr: A move possessed by all cat types that makes you lower your gaurd and take more damage from them");
+	}
+	
+	//making pistachio's moves
+	public void nap() {
+		if(selected == "pistachio") {
+			hp += 22;
+			System.out.println("Pstash really needed that third nap today, she "
+					+ "looks a lot better!");
+		}
+		else {
+			System.out.println("I'm not pstash, its 10am and I have things to do!");
+		}
+	}
+	public void eat() {
+		if(selected == "pistachio") {
+		def *= 1.2;
+		str *= 1.1;
+		System.out.println("Pstash looks a little bulkier, somehow...");
+		}
+		else {
+			System.out.println("I'm not a fatass I don'd need third dinner...");
+		}
+	}
+	public void chinBite(Game defender, double str) {
+		if(selected == "pistachio") {
+			defender.hp -= 1.0 * str * defender.def;
+			System.out.println("What the heck pistachio!"
+					+ " that kind of hurt!");
+		}
+	
+	}
+	public void pstashMoveList() {
+		System.out.println("");
+		System.out.println("Nap: A favorite move for pistachio, she'll regain some of her lost HP.");
+		System.out.println("Eat: Another favorite move for pistachio, she'll gain some strength and defence");
+		System.out.println("Chin bite: No one is really sure why she does this. We just know it hurts");
+		System.out.println("Purr: A move possessed by all cat types that makes you lower your gaurd and take more damage from them");
+	}
 	public void chooseChar(String playerNum) {
 		// prompting the player to choose a character
 		System.out.println(playerNum + "choose your character!");
@@ -33,6 +125,7 @@ public class Game {
 			dex = 15;
 			def = 1;
 			selected = "peanut";
+			peanutMoveList();
 			break;
 		case "pistachio":
 			hp = 42;
@@ -41,6 +134,7 @@ public class Game {
 			dex = 7;
 			def = 1;
 			selected = "pistachio";
+			pstashMoveList();
 			break;
 		}
 	}
@@ -48,28 +142,11 @@ public class Game {
 	// display hp method
 	public void hpD(Game player) {
 		System.out.println(selected + "'s hp is " + hp + ", and, " + player.selected + "'s hp is " + player.hp);
+		System.out.println("");
 	}
 
 
-	// building peanut's attacks
-	public void swipe(Game defender, double dexterity) {
-		if (dex > 13) {
-			defender.hp -= dexterity * 0.5 * defender.def;
-		} else {
-			System.out.println("I'm not fast enough to do that! I tried and tripped over the box :/");
-		}
-		
-	}
-
-	public void purr(Game defender, double intl) {
-		if (selected == "peanut" || selected == "pistachio") {
-			defender.def *= 0.8;
-			System.out.println(defender.selected + " looks a bit less attentive!" + defender.def);
-		}
-	}
-
-	
-	//turn method!!!!
+	// turn method!!!!
 	public void turn(double defHP, double defStr, double defIntl, double defDex, double defDef, Game defender) {
 		System.out.println(selected + ", what would you like to do?");
 		Scanner input = new Scanner(System.in);
@@ -81,8 +158,48 @@ public class Game {
 			break;
 		case "purr":
 			purr(defender, intl);
+			break;
+		case "sneak attack":
+			sneakAtk(defender, dex);
+			break;
+		case "catnip":
+			catnip();
+			break;
+		case "nap":
+			nap();
+			break;
+		case "chin bite":
+			chinBite(defender, str);
+			break;
+			
+			
+			
 		}
+	}
 
+	public void turnLoop(Game player2) {
+		while (hp > 0 && player2.hp > 0) {
+			int i = 0;
+			if (i % 2 == 0) {
+				// it is player1's turn
+				turn(player2.hp, player2.str, player2.intl, player2.dex, player2.def, player2);
+				hpD(player2);
+				i++;
+			}
+
+			else if (i % 2 != 0) {
+				// it is player2's turn
+				player2.turn(hp, str, intl, dex, def, Game.this);
+				hpD(player2);
+				i++;
+			}
+			// checks for win
+			if (hp <= 0) {
+				System.out.println("Congratulations " + player2.selected + ". you won! But at what cost...");
+			} else if (player2.hp <= 0) {
+				System.out.println("Congratulations " + selected + ". you won! But at what cost...");
+			}
+		}
 	}
 
 	public static void main(String[] args) {
@@ -91,34 +208,9 @@ public class Game {
 
 		player1.chooseChar("Player 1, ");
 		player2.chooseChar("Player 2, ");
-		
+
 		player1.hpD(player2);
-
-		double i = 0;
-		while (player1.hp > 0 && player2.hp > 0) {
-			if (i % 2 == 0) {
-				// it is player1's turn
-				player1.turn(player2.hp, player2.str, player2.intl, player2.dex, player2.def, player2);
-				player1.hpD(player2);
-				i++;
-			}
-
-			else if (i % 2 != 0) {
-				// it is player2's turn
-				player2.turn(player1.hp, player1.str, player1.intl, player1.dex, player1.def, player1);
-				player1.hpD(player2);
-				i++;
-			}
-
-		}
-		
-		// checks for win
-		if (player1.hp <= 0) {
-			System.out.println("Congratulations " + player2.selected + ". you won! But at what cost...");
-		} else if (player2.hp <= 0) {
-			System.out.println("Congratulations " + player1.selected + ". you won! But at what cost...");
-		}
-		
+		player1.turnLoop(player2);
 
 	}
 
