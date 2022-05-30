@@ -20,17 +20,18 @@ public class Game {
 	}
 
 	// building peanut's attacks
-	public void swipe(Game defender, double dexterity) {
+	public void swipe(Game defender) {
 		Random random = new Random();
 		int i = random.nextInt(2) + 1;
-		int swipeCount = 1;
-		System.out.println("me-ow! I was swiped " + swipeCount
-				+ " times!");
+		
 		while (i > 0) {
 			if (selected == "peanut") {
-				defender.hp -= dexterity * 0.5 * (1 / defender.def);
+				int swipeCount = 1;
+				defender.hp -= dex * 0.5 / defender.def;
 				swipeCount++;
 				i--;
+				System.out.println("me-ow! I was swiped " + swipeCount
+						+ " times!");
 			} else {
 				System.out.println("I'm not fast enough to do that! "
 						+ "I tried and tripped over the box :/");
@@ -40,7 +41,7 @@ public class Game {
 		}
 	}
 
-	public void purr(Game defender, double intl) {
+	public void purr(Game defender) {
 		if (selected == "peanut" || selected == "pistachio") {
 			double i = intl * 0.01;
 			defender.def *= 1 - i;
@@ -48,9 +49,9 @@ public class Game {
 		}
 	}
 	
-	public void sneakAtk(Game defender, double dex) {
+	public void sneakAtk(Game defender) {
 		if(selected == "peanut") {
-			defender.hp -= dex * 0.3 * defender.def;
+			defender.hp -= dex * 0.3 / defender.def;
 			defender.def *= 0.9;
 			System.out.println("Hey that was a cheap shot! Wait, where'd she go?");
 		}
@@ -61,7 +62,7 @@ public class Game {
 	
 	public void catnip() {
 		if(selected == "peanut") {
-			dex *= 1.2;
+			dex *= 1.3;
 		System.out.println("Peanut just got into the nip... looks like she's"
 				+ " moving even faster!");
 		}
@@ -70,9 +71,10 @@ public class Game {
 	public void peanutMoveList() {
 		System.out.println("");
 		System.out.println("Peanut the Quick has 4 moves");
-		System.out.println("Swipe: A ligtning fast attack that deals damage based off her dexterity");
-		System.out.println("Sneak attack: A cheap shot that doesn't do as much damage as swipe, but makes you more vulnerable.");
-		System.out.println("Purr: A move possessed by all cat types that makes you lower your gaurd and take more damage from them");
+		System.out.println("swipe: A ligtning fast attack that deals damage based off her dexterity");
+		System.out.println("sneak attack: A cheap shot that doesn't do as much damage as swipe, but makes you more vulnerable.");
+		System.out.println("purr: A move possessed by all cat types that makes you lower your gaurd and take more damage from them");
+		System.out.println("catnip: Peanut knows this to be not only a delicacy, but also a lethal tool. She uses this to get the speed boost she needs to do major damage");
 	}
 	
 	//making pistachio's moves
@@ -89,16 +91,16 @@ public class Game {
 	public void eat() {
 		if(selected == "pistachio") {
 		def *= 1.2;
-		str *= 1.1;
+		str *= 1.15;
 		System.out.println("Pstash looks a little bulkier, somehow...");
 		}
 		else {
 			System.out.println("I'm not a fatass I don'd need third dinner...");
 		}
 	}
-	public void chinBite(Game defender, double str) {
+	public void chinBite(Game defender) {
 		if(selected == "pistachio") {
-			defender.hp -= 1.0 * str * defender.def;
+			defender.hp -= 1.0 * str / defender.def;
 			System.out.println("What the heck pistachio!"
 					+ " that kind of hurt!");
 		}
@@ -106,35 +108,153 @@ public class Game {
 	}
 	public void pstashMoveList() {
 		System.out.println("");
+		System.out.println("Pistachio the Strong has 4 moves. She uses them to strengthen herself against any evils of the lands between the boxes");
 		System.out.println("Nap: A favorite move for pistachio, she'll regain some of her lost HP.");
-		System.out.println("Eat: Another favorite move for pistachio, she'll gain some strength and defence");
+		System.out.println("Eat: Another favorite move for pistachio, she'll gain some strength and defense");
 		System.out.println("Chin bite: No one is really sure why she does this. We just know it hurts");
 		System.out.println("Purr: A move possessed by all cat types that makes you lower your gaurd and take more damage from them");
 	}
+	//making beeboon's movelist
+	public void wither(Game defender) {
+		if(selected == "bee boon") {
+		defender.dex *= 1 / (intl / 13);
+		defender.str *= 0.8;
+		System.out.println("Beeboon withers " + defender.selected + ". they feel like they just ate 10lbs of alfredo!");
+		}
+		
+	}
+	
+	public void mindRead(Game defender) {
+		if(selected == "bee boon") {
+		defender.intl *= 1 / (intl / 13);
+		intl *= 1 * (intl / 13);
+		System.out.println("Beeboon read " + defender.selected + "'s thoughts! She stole some of their smarts in the process and is not happy...");
+		}
+	}
+	
+	public void crocodileTears(Game defender) {
+		if(selected == "bee boon") {
+			defender.def *= 1 / (intl / 14);
+			System.out.println("Beeboon begins to cry! " + defender.selected + " feels bad and lowers their guard!");
+		}
+	}
+	public void beeboonsWrath(Game defender) {
+		if(selected == "bee boon") {
+			defender.hp -= (1 * 25 * (intl / 13)) / defender.def;
+			hp -= 3 * ((intl / 13) / def);
+			System.out.println("beeboon reels in her anger for 20 minutes. Then lets it all out! She lets out so much she hurts her and her opponent!");
+		}
+	}
+	
+	public void beeboonMoveList() {
+		System.out.println("");
+		System.out.println("Beeboon the witch has 4 moves. 3 too hinder her foes and 1 to damage them.");
+		System.out.println("wither: Beeboon's favorite move against strong or fast characters. She uses her natural odor to weaken her foes.");
+		System.out.println("mind read: Beeboon's signature move against pip pop. She uses this move to read his thoughts. Stealing some of his intellect in the process");
+		System.out.println("crocodile tears: Don't let her fool you. She uses this move to make her opponent lower their guard and get her ice cream too");
+		System.out.println("beeboons wrath: Her move so powerful that she hurts not only her opponent but herself too. So much fury.. so... scary...");
+	}
+	
+	//pip pop moves
+	public void mageSpank(Game defender) {
+			Random random = new Random();
+			int i = random.nextInt(4) + 1;
+			int swipeCount = 1;
+			System.out.println("pip pop winds up his magical hand... \n");
+			while (i > 0) {
+				if (selected == "pip pop") {
+					defender.hp -= intl * 0.3 / defender.def;
+					swipeCount++;
+					i--;
+					System.out.println("what did I do to deserve being spanked " + swipeCount
+							+ " times!");
+				}
+
+			}
+	}
+	
+	public void grumpyFace() {
+		if (selected == "pip pop") {
+			System.out.println("pip pop has his grumpy face on... He must be getting more focused");
+			intl *= 1.15;
+		}
+	}
+	public void tickies(Game defender) {
+		if (selected == "pip pop") {
+			System.out.println("pip pop starts to tickle " + defender.selected + "'s back. They don't seem to have the same fight left in them.");
+			defender.str *= 0.8;
+			defender.dex *= 0.8;
+			defender.intl *= 0.8;
+		}
+	}
+	public void mageDunk(Game defender) {
+		if (selected == "pip pop") {
+			System.out.println("pip pop magically flys through the sky over " + defender.selected + "'s head. They're so embarassed they stop paying as much attention");
+			defender.def *= 0.85;
+		}
+	}
+	public void pippopMoveList() {
+		System.out.println("");
+		System.out.println("pip pop the sorcerer has 4 vaired moves");
+		System.out.println("mage spank: pip pop projects an ethereal hand behind whoever is naughty enough to try and fight him. Spanking them up to 6 times");
+		System.out.println("grumpy face: pip pop puts on his grumpy face and begins to focus. This increases the damage of his next attacks");
+		System.out.println("tickies: pip pop tickies the back of anyone who dares to face him and they start to hit him less hard out of sympathy.");
+		System.out.println("mage dunk: pip pop conjures a hoop and court from thin air. His opponent gets completely dunked on. The ensuing embarassment makes them lower their defences");
+	}
+	
+	public void hug() {
+		if(selected == "tiny hug") {
+			System.out.println("tiny hug hugs you. Not much else happens but he feels brave");
+		}
+	}
 	public void chooseChar(String playerNum) {
 		// prompting the player to choose a character
+		peanutMoveList();
+		pstashMoveList();
+		beeboonMoveList();
+		pippopMoveList();
 		System.out.println(playerNum + "choose your character!");
 		Scanner input = new Scanner(System.in);
 		String charSelected = input.nextLine();
 
 		switch (charSelected) {
 		case "peanut":
-			hp = 20;
+			hp = 84;
 			str = 7;
 			intl = 11;
-			dex = 15;
+			dex = 16;
 			def = 1;
 			selected = "peanut";
 			peanutMoveList();
 			break;
 		case "pistachio":
-			hp = 42;
+			hp = 100;
 			str = 17;
 			intl = 4;
 			dex = 7;
 			def = 1;
 			selected = "pistachio";
 			pstashMoveList();
+			break;
+		case "beeboon":
+			hp = 78;
+			str = 12;
+			intl = 17;
+			dex = 13;
+			def = 1;
+			selected = "bee boon";
+			beeboonMoveList();
+			break;
+		case "pip pop":
+			hp = 72;
+			str = 8;
+			intl = 19;
+			dex = 11;
+			def = 1;
+			selected = "pip pop";
+			break;
+		case "tiny hug":
+			hp = 1;
 			break;
 		}
 	}
@@ -154,13 +274,13 @@ public class Game {
 
 		switch (thisTurn) {
 		case "swipe":
-			swipe(defender, dex);
+			swipe(defender);
 			break;
 		case "purr":
-			purr(defender, intl);
+			purr(defender);
 			break;
 		case "sneak attack":
-			sneakAtk(defender, dex);
+			sneakAtk(defender);
 			break;
 		case "catnip":
 			catnip();
@@ -169,28 +289,56 @@ public class Game {
 			nap();
 			break;
 		case "chin bite":
-			chinBite(defender, str);
+			chinBite(defender);
 			break;
-			
-			
-			
+		case "wither":
+			wither(defender);
+			break;
+		case "mind read":
+			mindRead(defender);
+			break;
+		case "crocodile tears":
+			crocodileTears(defender);
+			break;
+		case "beeboons wrath":
+			beeboonsWrath(defender);
+			break;
+		case "mage spank":
+			mageSpank(defender);
+			break;
+		case "grumpyFace":
+			grumpyFace();
+			break;
+		case "tickies":
+			tickies(defender);
+			break;
+		case "mage dunk":
+			mageDunk(defender);
+			break;
+		case "hug":
+			hug();
+			break;
 		}
 	}
 
 	public void turnLoop(Game player2) {
+		int i = 0;
 		while (hp > 0 && player2.hp > 0) {
-			int i = 0;
 			if (i % 2 == 0) {
 				// it is player1's turn
 				turn(player2.hp, player2.str, player2.intl, player2.dex, player2.def, player2);
+				System.out.println("");
 				hpD(player2);
+				System.out.println("");
 				i++;
 			}
 
 			else if (i % 2 != 0) {
 				// it is player2's turn
 				player2.turn(hp, str, intl, dex, def, Game.this);
+				System.out.println("");
 				hpD(player2);
+				System.out.println("");
 				i++;
 			}
 			// checks for win
@@ -199,13 +347,15 @@ public class Game {
 			} else if (player2.hp <= 0) {
 				System.out.println("Congratulations " + selected + ". you won! But at what cost...");
 			}
+			else if(selected == "tiny hug" || player2.selected == "tiny hug") {
+				System.out.println("tiny hug has been defeated. How could you.");
+			}
 		}
 	}
 
 	public static void main(String[] args) {
 		Game player1 = new Game(0, 0, 0, 0, 0, "");
 		Game player2 = new Game(0, 0, 0, 0, 0, "");
-
 		player1.chooseChar("Player 1, ");
 		player2.chooseChar("Player 2, ");
 
