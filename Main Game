@@ -255,6 +255,11 @@ public class Game {
 			break;
 		case "tiny hug":
 			hp = 1;
+			str = 1;
+			intl = 1;
+			dex = 1;
+			def = 1;
+			selected = "tiny hug";
 			break;
 		}
 	}
